@@ -8,7 +8,7 @@
         </v-btn>
       </page-card-toolbar>
       <v-card-text>
-        The file at <strong>{{ file.path }}/{{ file.name }}</strong> will be removed from the sd card.
+        The {{ type }} at <strong>/{{ currentBoardPath }}/{{ file.name }}</strong> will be removed from the sd card.
       </v-card-text>
       <v-card-actions>
         <v-btn :color="color" flat @click="confirm">confirm</v-btn>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'files-remove-dialog',
@@ -40,8 +40,23 @@ export default {
   data () {
     return {
       color: 'error',
-      icon: 'delete_forever',
-      title: 'Remove file'
+      icon: 'delete_forever'
+    }
+  },
+
+  computed: {
+    ...mapGetters('files', ['currentBoardPath']),
+
+    isFile () {
+      return !!this.$props.file.humanSize
+    },
+
+    type () {
+      return this.isFile ? 'file' : 'folder'
+    },
+
+    title () {
+      return 'Remove ' + this.type
     }
   },
 
@@ -53,7 +68,7 @@ export default {
     },
 
     confirm () {
-      this.removeFile(this.file)
+      this.removeFile(this.$props.file)
       this.close()
     }
   }

@@ -318,17 +318,30 @@ export default {
       let address = rootState.boards.selectedBoardAddress
       let path = getters.currentBoardPath
       let source = path + '/' + file.name.toLowerCase()
+      let isFile = !!file.humanSize
 
       commit('SET_FILE_LIST_LOADING', true)
 
       rm({ address, path: source }).then(() => {
-        commit('REMOVE_FILE', { address, path, file })
+        if (isFile) {
+          commit('REMOVE_FILE', { address, path, file })
+        } else {
+          commit('REMOVE_FOLDER', { address, path, folder: file })
+        }
       })
       .catch(e => {
+        let messages = e.message
+
+        if (!isFile) {
+          messages += ', the directory is probably not empty'
+        }
+
         this.dispatch('logs/pushMessage', {
           type: 'error',
-          text: address + ' : ' + e.message
+          text: address + ' : ' + messages + '.'
         })
+
+        throw e
       })
       .then(() => {
         commit('SET_FILE_LIST_LOADING', false)
