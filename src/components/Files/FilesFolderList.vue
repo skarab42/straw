@@ -2,7 +2,7 @@
   <page-card>
 
     <files-list-toolbar :icon="icon" :title="title">
-      <v-btn icon @click="dialogs.addFolder = true">
+      <v-btn icon @click="dialogs.add = true">
         <v-icon>add</v-icon>
       </v-btn>
     </files-list-toolbar>
@@ -21,15 +21,27 @@
           </v-list-tile-content>
           <v-list-tile-avatar @click.stop>
             <v-icon v-if="folder.invalidChars">warning</v-icon>
-            <v-btn v-if="!folder.invalidChars" icon @click.stop>
-              <v-icon color="grey lighten-1">more_vert</v-icon>
-            </v-btn>
+            <v-menu v-if="!folder.invalidChars" bottom left transition="scale-transition">
+              <v-btn icon slot="activator">
+                <v-icon color="grey">more_vert</v-icon>
+              </v-btn>
+              <v-list>
+                <v-list-tile v-for="action in actions" :key="action.title" @click="openDialog(action.dialog, folder)">
+                  <v-list-tile-action>
+                    <v-icon>{{ action.icon }}</v-icon>
+                  </v-list-tile-action>
+                  <v-list-tile-title>{{ action.title }}</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
           </v-list-tile-avatar>
         </v-list-tile>
       </files-list-loading>
     </v-card-text>
 
-    <files-add-folder-dialog :open="dialogs.addFolder" @close="dialogs.addFolder = false" />
+    <files-add-folder-dialog :open="dialogs.add" @close="dialogs.add = false" />
+    <files-rename-dialog :file="tempFolder" :open="dialogs.rename" @close="dialogs.rename = false" />
+    <files-remove-dialog :file="tempFolder" :open="dialogs.remove" @close="dialogs.remove = false" />
 
   </page-card>
 </template>
@@ -41,6 +53,8 @@ import FilesListLoading from './FilesListLoading'
 import FilesIcon from './FilesIcon'
 import FilesInfo from './FilesInfo'
 import FilesAddFolderDialog from './FilesAddFolderDialog'
+import FilesRenameDialog from './FilesRenameDialog'
+import FilesRemoveDialog from './FilesRemoveDialog'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -52,7 +66,9 @@ export default {
     FilesListLoading,
     FilesIcon,
     FilesInfo,
-    FilesAddFolderDialog
+    FilesAddFolderDialog,
+    FilesRenameDialog,
+    FilesRemoveDialog
   },
 
   data () {
@@ -60,8 +76,14 @@ export default {
       icon: 'folder',
       title: 'Folders',
       tempFolder: null,
+      actions: [
+        { dialog: 'rename', title: 'Rename', icon: 'mode_edit' },
+        { dialog: 'remove', title: 'Remove', icon: 'delete_forever' }
+      ],
       dialogs: {
-        addFolder: false
+        add: false,
+        rename: false,
+        remove: false
       }
     }
   },
@@ -75,6 +97,13 @@ export default {
 
     openSubFolder (subpath) {
       this.openFolder({ subpath })
+    },
+
+    openDialog (name, folder) {
+      if (this.dialogs[name] !== undefined) {
+        this.tempFolder = folder
+        this.dialogs[name] = true
+      }
     }
   }
 }

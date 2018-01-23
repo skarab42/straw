@@ -178,6 +178,25 @@ export default {
       state.boardsCollection[address].paths[path].folders.push(folder)
     },
 
+    'UPDATE_FOLDER' (state, { address, path, key, ...folder }) {
+      let paths = state.boardsCollection[address].paths[path]
+
+      paths.folders = paths.folders.map(f => {
+        if (f.key === key) {
+          Object.assign(f, folder)
+        }
+
+        return f
+      })
+    },
+
+    'REMOVE_FOLDER' (state, { address, path, folder }) {
+      let paths = state.boardsCollection[address].paths[path]
+      let folders = paths.folders.filter(f => f.name !== folder.name.toLowerCase())
+
+      state.boardsCollection[address].paths[path].folders = folders
+    },
+
     'ADD_FILE' (state, { address, path, file }) {
       state.boardsCollection[address].paths[path].files.push(file)
     },
@@ -327,12 +346,18 @@ export default {
       let path = getters.currentBoardPath
       let source = path + '/' + file.name
       let target = path + '/' + name
+      let isFile = !!file.humanSize
 
       commit('SET_FILE_LIST_LOADING', true)
 
       mv({ address, source, target }).then(() => {
-        let newFile = createFile({ ...file, name })
-        commit('UPDATE_FILE', { address, path, ...newFile, key: file.key })
+        if (isFile) {
+          let newFile = createFile({ ...file, name })
+          commit('UPDATE_FILE', { address, path, ...newFile, key: file.key })
+        } else {
+          let newFile = createFolder({ ...file, name })
+          commit('UPDATE_FOLDER', { address, path, ...newFile, key: file.key })
+        }
       })
       .catch(e => {
         this.dispatch('logs/pushMessage', {

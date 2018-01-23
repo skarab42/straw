@@ -8,7 +8,7 @@
         </v-btn>
       </page-card-toolbar>
       <v-card-text>
-        <v-text-field autofocus label="File name" :placeholder="file.name" :rules="[validate]" v-model="name" @keyup.13="confirm" />
+        <v-text-field autofocus :label="label" :placeholder="file.name" :rules="[validate]" v-model="name" @keyup.13="confirm" />
       </v-card-text>
       <v-card-actions>
         <v-btn :disabled="!valid" :color="color" flat @click="confirm">confirm</v-btn>
@@ -49,13 +49,30 @@ export default {
   },
 
   computed: {
+    ...mapGetters('files', ['currentBoardFileList', 'currentBoardFolderList']),
+
     title () {
       return 'Rename : ' + this.$props.file.name
+    },
+
+    isFile () {
+      return !!this.$props.file.humanSize
+    },
+
+    type () {
+      return this.isFile ? 'File' : 'Folder'
+    },
+
+    label () {
+      return this.type + ' name'
+    },
+
+    fileList () {
+      return this.isFile ? this.currentBoardFileList : this.currentBoardFolderList
     }
   },
 
   methods: {
-    ...mapGetters('files', ['currentBoardFileList']),
     ...mapActions('files', ['renameFile']),
 
     clear () {
@@ -84,12 +101,12 @@ export default {
         ' [ ' + invalidChars.join(', ') + ' ].'
       }
 
+      let files = this.fileList
       let key = this.$props.file.key
-      let files = this.currentBoardFileList()
       let notUnique = files.some(f => f.name === name && f.key !== key)
 
       if (notUnique) {
-        return 'File name must be unique.'
+        return this.type + ' name must be unique.'
       }
 
       this.valid = true
