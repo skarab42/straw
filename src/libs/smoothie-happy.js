@@ -1,4 +1,8 @@
-import { post } from './http-request'
+import { get, post } from './http-request'
+
+// git URL's
+const apiURL = 'https://api.github.com/repos/Smoothieware/Smoothieware/'
+// const rawURL = 'https://raw.githubusercontent.com/Smoothieware/Smoothieware/'
 
 // encoding
 const charset = 'ISO-8859-1'
@@ -155,5 +159,31 @@ export function upload ({ address, path, file, ...settings }) {
     }
 
     return file
+  })
+}
+
+// Firmware update/upgrade
+export function getFirmwareCommits () {
+  let url = apiURL + 'commits'
+  let data = '?sha=edge&path=FirmwareBin/firmware.bin&per_page=100'
+
+  return get(url, { data }).then(response => {
+    if (!response.length) {
+      throw new Error('Empty response...')
+    }
+
+    let json = JSON.parse(response)
+
+    if (!json) {
+      throw new Error('Empty response...')
+    }
+
+    let commits = {}
+
+    json.forEach((commit, i) => {
+      commits[commit.parents[0].sha.substr(0, 7)] = i
+    })
+
+    return commits
   })
 }
