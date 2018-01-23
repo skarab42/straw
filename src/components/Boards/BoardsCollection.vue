@@ -16,7 +16,7 @@
           <v-list-tile-content>
             <v-list-tile-title v-html="board.name" />
           </v-list-tile-content>
-          <v-list-tile-action @click.stop>
+          <v-list-tile-avatar @click.stop>
             <v-menu bottom left transition="scale-transition">
               <v-btn icon slot="activator">
                 <v-icon color="grey">more_vert</v-icon>
@@ -30,7 +30,7 @@
                 </v-list-tile>
               </v-list>
             </v-menu>
-          </v-list-tile-action>
+          </v-list-tile-avatar>
         </v-list-tile>
       </v-list>
 

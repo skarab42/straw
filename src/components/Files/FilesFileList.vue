@@ -15,7 +15,7 @@
             <v-list-tile-title>{{ file.name }}</v-list-tile-title>
             <files-info :file="file" />
           </v-list-tile-content>
-          <v-list-tile-action>
+          <v-list-tile-avatar @click.stop>
             <v-icon v-if="file.invalidChars">warning</v-icon>
             <v-menu v-if="!file.invalidChars" bottom left transition="scale-transition">
               <v-btn icon slot="activator">
@@ -30,7 +30,7 @@
                 </v-list-tile>
               </v-list>
             </v-menu>
-          </v-list-tile-action>
+          </v-list-tile-avatar>
         </v-list-tile>
       </files-list-loading>
     </v-card-text>
