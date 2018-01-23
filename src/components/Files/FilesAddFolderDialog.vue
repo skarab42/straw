@@ -80,10 +80,6 @@ export default {
     },
 
     confirm () {
-      // console.log('new folder:', this.name)
-      // let address = this.selectedBoardAddress
-      // let path = this.currentBoardPath
-      // this.addFolder({ address, path, folder: { name: this.name } })
       this.makeFolder({ name: this.name })
       this.close()
     }
