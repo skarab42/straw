@@ -106,7 +106,7 @@ export default {
       let notUnique = files.some(f => f.name === name && f.key !== key)
 
       if (notUnique) {
-        return this.type + ' name must be unique.'
+        return this.label + ' must be unique.'
       }
 
       this.valid = true
