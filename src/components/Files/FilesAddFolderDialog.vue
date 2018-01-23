@@ -45,7 +45,7 @@ export default {
 
   computed: {
     ...mapGetters('boards', ['selectedBoardAddress']),
-    ...mapGetters('files', ['currentBoardPath'])
+    ...mapGetters('files', ['currentBoardPath', 'currentBoardFolderList'])
   },
 
   methods: {
@@ -67,6 +67,10 @@ export default {
       if (invalidChars) {
         return 'Invalid char' + (invalidChars.length > 1 ? 's' : '') +
         ' [ ' + invalidChars.join(', ') + ' ].'
+      }
+
+      if (this.currentBoardFolderList.some(f => f.name === name)) {
+        return 'Folder name must be unique.'
       }
 
       this.valid = true
