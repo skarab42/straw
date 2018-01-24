@@ -5,7 +5,8 @@ function reducer (state) {
   return {
     showNotifications: state.logs.showNotifications,
     drawer: state.drawer,
-    boards: state.boards
+    boards: state.boards,
+    firmware: state.firmware
   }
 }
 
@@ -16,7 +17,8 @@ function restoreState (key, storage) {
   return !store ? {} : {
     logs: { showNotifications: store.showNotifications },
     drawer: store.drawer,
-    boards: store.boards
+    boards: store.boards,
+    firmware: store.firmware
   }
 }
 

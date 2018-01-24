@@ -15,6 +15,9 @@
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title v-html="board.name" />
+            <v-list-tile-sub-title>
+              {{ getFirmwareCommitIndex(board.version.hash) }}
+            </v-list-tile-sub-title>
           </v-list-tile-content>
           <v-list-tile-avatar @click.stop>
             <v-menu bottom left transition="scale-transition">
@@ -75,7 +78,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters('boards', ['boardsCount', 'boardsCollection'])
+    ...mapGetters('boards', ['boardsCount', 'boardsCollection']),
+    ...mapGetters('firmware', ['getFirmwareCommitIndex'])
   },
 
   methods: {

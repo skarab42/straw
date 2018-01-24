@@ -180,8 +180,8 @@ export function getFirmwareCommits () {
 
     let commits = {}
 
-    json.forEach((commit, i) => {
-      commits[commit.parents[0].sha.substr(0, 7)] = i
+    json.forEach((commit, index) => {
+      commits[commit.parents[0].sha.substr(0, 7)] = { index }
     })
 
     return commits

@@ -56,6 +56,10 @@ export default {
     LogsNotifications
   },
 
+  created () {
+    this.updateFirmwareCommits()
+  },
+
   computed: {
     ...mapGetters('app', {
       appName: 'name',
@@ -88,6 +92,8 @@ export default {
   },
 
   methods: {
+    ...mapActions('firmware', ['updateFirmwareCommits']),
+
     ...mapActions('app', {
       setAppFullscreen: 'setFullscreen'
     }),
