@@ -19,6 +19,16 @@ export function command (address, settings = {}) {
     ...settings,
     data: settings.data.trim() + '\n'
   })
+  .then(response => {
+    response = response.trim()
+    let test = response.toLowerCase()
+
+    if (test.startsWith('error:unsupported command')) {
+      throw new Error(response.slice(6))
+    }
+
+    return response
+  })
 }
 
 // VERSION
