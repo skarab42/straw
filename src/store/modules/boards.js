@@ -60,7 +60,7 @@ export default {
   actions: {
     addBoard ({ commit, getters }, board) {
       if (getters.hasBoard(board)) {
-        commit('UPDATE_BOARD', { version: board.version })
+        commit('UPDATE_BOARD', { address: board.address, version: board.version })
       } else {
         let newBoard = createBoard(board)
         commit('ADD_BOARD', newBoard)
