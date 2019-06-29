@@ -12,13 +12,13 @@
   },
   "fr-fr": {
     "title": "Créer un dossier",
-    "label": "Nom du répertoire",
+    "label": "Nom du dossier",
     "allowedChars": "Seuls les caractères alphanumériques et les caractères spéciaux \"-_.\", peuvent être utilisés dans le nom du dossier.",
     "alphaNumFirst": "Le nom du dossier dois commencer par un caractère alphanumérique.",
     "cancel": "Annuler",
     "create": "Créer",
     "folderCreated": "Dossier \"{path}\" créer.",
-    "folderCreateError": "Impossible de créer le répertoire \"{path}\". ({message})"
+    "folderCreateError": "Impossible de créer le dossier \"{path}\". ({message})"
   }
 }
 </i18n>
@@ -35,7 +35,6 @@
         ref="name"
         v-model="name"
         :label="$t('label')"
-        :prefix="`${path}/`"
         :hint="$t('allowedChars')"
         :error="hasError"
         :error-message="errorMessage"
@@ -93,8 +92,6 @@ export default {
     },
     create: function (event) {
       if (this.hasError) return
-      console.log('create folder:', this.name)
-      console.log('board:', this.board)
       this.loading = true
       let board = new Board(this.board.address, this.board)
       let path = `${this.path}/${this.name}`.toLowerCase()

@@ -53,11 +53,13 @@ module.exports = function (ctx) {
         'QBreadcrumbs',
         'QBreadcrumbsEl',
         'QInnerLoading',
-        'QSpinnerGears'
+        'QSpinnerGears',
+        'QMenu'
       ],
 
       directives: [
-        'Ripple'
+        'Ripple',
+        'TouchPan'
       ],
 
       // Quasar plugins
