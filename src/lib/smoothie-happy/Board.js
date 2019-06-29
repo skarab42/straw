@@ -62,7 +62,7 @@ export default class Board {
 
   removeFilesFromPath (path) {
     this.state.files = this.state.files.filter(file => {
-      return file.path.parent !== path
+      return !file.parent.startsWith(path)
     })
     return this.state.files
   }
